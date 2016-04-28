@@ -26,7 +26,40 @@ if (!$user->count ()) {
 }
 
 
-$userDel = DB::getInstance()->delete('users', array('username','=', 'Tom'));
+//$userDel = DB::getInstance()->delete('users', array('username','=', 'Tom'));
+
+
+echo '<br><br>';
+
+
+$userInsert = DB::getInstance()->insert('users', array(
+    'username' => '1234567890123456789012345',
+    'password' => 'password',
+    'salt' => 'salt'
+
+
+    ));
+
+if ($userInsert) {
+    echo 'Inserted';
+} else {
+    echo 'Failed';
+}
+echo '<br><br>';
+
+$userUpdate = DB::getInstance()->update('users', 12, array(
+    'password' => 'newpass2',
+    'salt' => 'newsalt2'
+
+
+    ));
+
+if ($userInsert) {
+    echo 'Inserted';
+} else {
+    echo 'Failed';
+}
+
 
 
 echo '<br><br>';
