@@ -1,43 +1,70 @@
 <?php
 require_once 'core/init.php';
 
+
 if (Input::exists()) {
-    $validate = new Validate ();
 
-    $validation = $validate->check($_POST, array(
-        'username' => array(
-            'field_name' => 'Username',
-            'required' => true,
-            'min' => 2,
-            'max' => 20,
-            'unique' => 'users'
-        ),
-        'password' => array(
-            'required' => true,
-            'min' => 6
-        ),
-        'password_again' => array(
-            'required' => true,
-            'matches' => 'password'
-        ),
-        'first_name' => array(
-            'required' => true,
-            'min' => 2,
-            'max' => 50
-        ),
-            'last_name' => array(
-            'required' => true,
-            'min' => 2,
-            'max' => 50
-        )
-    ));
+    if (Token::check(Input::get('token'))) {
+        echo 'I have been run';
 
-    if($validation->passed()) {
-        echo 'Passed';
-    } else {
-        foreach ($validation->errors() as $error) {
-            echo $error . '<br>';
+        $validate = new Validate ();
+
+        $validation = $validate->check($_POST, array(
+            'username' => array(
+                'field_name' => 'Username',
+                'required' => true,
+                'min' => 2,
+                'max' => 20,
+                'unique' => 'users'
+            ),
+            'password' => array(
+                'required' => true,
+                'min' => 6
+            ),
+            'password_again' => array(
+                'required' => true,
+                'matches' => 'password'
+            ),
+            'first_name' => array(
+                'required' => true,
+                'min' => 2,
+                'max' => 50
+            ),
+                'last_name' => array(
+                'required' => true,
+                'min' => 2,
+                'max' => 50
+            )
+        ));
+
+        if($validation->passed()) {
+            $user = new User();
+
+            $salt = Hash::salt(32);
+
+            try {
+                $user->create(array(
+                    'username' => Input::get('username'),
+                    'password' => Hash::make(Input::get('password'), $salt),
+                    'salt' => $salt,
+                    'firstname' => Input::get('first_name'),
+                    'lastname' => Input::get('last_name'),
+                    'joined' => date('Y-m-d H:i:s'),
+                    'group' => 1
+                ));
+
+                Session::flash('home', 'You have registered');
+                Redirect::to('index.php');
+            } catch(Exception $e) {
+                die($e->getMessage());
+            }
+        } else {
+            foreach ($validation->errors() as $error) {
+                echo $error . '<br>';
+            }
         }
+    } else {
+        echo 'Invalid attempt to run';
     }
 }
 ?>    
@@ -66,6 +93,8 @@ if (Input::exists()) {
         <label for="last_name">Last Name</label>    
         <input type="text" name="last_name" id="last_name" value="<?php echo Input::get('last_name'); ?>" autocomplete="off" />
     </div><!-- /.field -->
+
+    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>" />
    
     <input type="submit" value="Register" />
 

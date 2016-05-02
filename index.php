@@ -2,10 +2,11 @@
  require_once 'core/init.php';
 
 
-
-
+if (Session::exists('home')) {
+    echo '<p>'.Session::flash('home').'</p>';
+}
  //$users = DB::getInstance()->query('SELECT username FROM users');
-
+/*
 
 $user2 = DB::getInstance()->query("SELECT username FROM users WHERE username = ?", array('SteveB'));
 if ($user2->error()) {
@@ -64,3 +65,5 @@ if ($userInsert) {
 
 echo '<br><br>';
  echo Config::get('mysql/host');
+
+ */
