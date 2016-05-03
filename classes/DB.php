@@ -139,6 +139,14 @@ class DB {
     }
 
 
+    public function first () {
+        return $this->results()[0];
+    }
+
+        public function results () {
+        return $this->_results;
+    }
+
 
     public function count () {
         return $this->_count;

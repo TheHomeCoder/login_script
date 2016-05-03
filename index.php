@@ -2,11 +2,37 @@
  require_once 'core/init.php';
 
 
+$user = new User();
+if ($user->isLoggedIn()) {
+   
+?>
+
+<p>Hello <a href="#"><?php echo escape($user->data()->username); ?></a></p>
+
+<ul>
+    <li><a href="logout.php">Logout</a></li>
+    <li></li>
+    <li></li>
+</ul>
+<?php
+} else {
+    echo 'You must <a href="login.php">Login</a> or <a href="register.php">Register</a>';
+}
+/*
+echo Session::get(Config::get('session/session_name'));
+
 if (Session::exists('home')) {
     echo '<p>'.Session::flash('home').'</p>';
 }
+$users = DB::getInstance()->query('SELECT username FROM users');
+foreach ($users->results() as $user) {
+   echo $user->username, '<br>';
+}
+echo '<br><br>';
+
+echo $users->first()->username;
  //$users = DB::getInstance()->query('SELECT username FROM users');
-/*
+
 
 $user2 = DB::getInstance()->query("SELECT username FROM users WHERE username = ?", array('SteveB'));
 if ($user2->error()) {
