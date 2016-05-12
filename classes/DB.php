@@ -94,7 +94,7 @@ class DB {
             }
 
 
-            $sql = "INSERT INTO users (`" . implode('`,`', $keys) . "`) VALUES ({$values})";
+            $sql = "INSERT INTO {$table} (`" . implode('`,`', $keys) . "`) VALUES ({$values})";
 
             if (!$this->query($sql,$fields)->error()) {
                 return true;
@@ -143,7 +143,7 @@ class DB {
         return $this->results()[0];
     }
 
-        public function results () {
+    public function results () {
         return $this->_results;
     }
 

@@ -7,23 +7,35 @@ if ($user->isLoggedIn()) {
    
 ?>
 
-<p>Hello <a href="#"><?php echo escape($user->data()->username); ?></a></p>
+<p>Hello <a href="profile.php?user=<?php echo escape($user->data()->username); ?>"><?php echo escape($user->data()->username); ?></a></p>
 
 <ul>
     <li><a href="logout.php">Logout</a></li>
-    <li></li>
-    <li></li>
+    <li><a href="update.php">Update</a></li>
+    <li><a href="changepassword.php">Change Password</a></li>
 </ul>
 <?php
+
+if($user->hasPermission('admin')) {
+    echo 'Is Admin';
+}
+
+if($user->hasPermission('moderator')) {
+    echo 'Is Mod';
+}
+
+
 } else {
     echo 'You must <a href="login.php">Login</a> or <a href="register.php">Register</a>';
 }
-/*
-echo Session::get(Config::get('session/session_name'));
 
 if (Session::exists('home')) {
     echo '<p>'.Session::flash('home').'</p>';
 }
+/*
+echo Session::get(Config::get('session/session_name'));
+
+
 $users = DB::getInstance()->query('SELECT username FROM users');
 foreach ($users->results() as $user) {
    echo $user->username, '<br>';
